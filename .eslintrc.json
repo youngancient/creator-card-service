@@ -14,6 +14,9 @@
     "Atomics": "readonly",
     "SharedArrayBuffer": "readonly"
   },
+  "ignorePatterns": [
+    "core/"
+  ],
   "parserOptions": {
     "ecmaVersion": 2022
   },
