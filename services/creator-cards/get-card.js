@@ -12,15 +12,14 @@ const getCardSpec = `root {
 const parsedGetCardSpec = validator.parse(getCardSpec);
 
 function formatResponse(cardData) {
-  const data = { ...cardData };
-  data.id = data._id;
-  delete data._id;
-  delete data.__v;
-  delete data.access_code;
-  return data;
+  const { _id, __v, access_code: accessCode, ...rest } = cardData;
+  return {
+    id: _id,
+    ...rest,
+  };
 }
 
-async function getCreatorCardService(serviceData, options = {}) {
+async function getCreatorCardService(serviceData) {
   let response;
 
   const data = validator.validate(serviceData, parsedGetCardSpec);

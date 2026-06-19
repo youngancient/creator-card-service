@@ -60,13 +60,12 @@ async function generateUniqueSlug(title) {
 }
 
 function formatResponse(cardData) {
-  const data = { ...cardData };
-  data.id = data._id;
-  delete data._id;
-  delete data.__v;
-  if (!('access_code' in data) || data.access_code === undefined) {
-    data.access_code = null;
-  }
+  const { _id, __v, access_code: accessCode, ...rest } = cardData;
+  const data = {
+    id: _id,
+    ...rest,
+  };
+  data.access_code = accessCode || null;
   return data;
 }
 
