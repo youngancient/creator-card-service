@@ -23,7 +23,7 @@ const schemaConfig = {
   _id: { type: SchemaTypes.ULID, required: true },
   title: { type: SchemaTypes.String, required: true },
   description: { type: SchemaTypes.String },
-  slug: { type: SchemaTypes.String, required: true, index: { unique: true } },
+  slug: { type: SchemaTypes.String, required: true },
   creator_reference: { type: SchemaTypes.String, required: true, index: true },
   links: { type: SchemaTypes.Mixed },
   service_rates: { type: SchemaTypes.Mixed },
@@ -36,6 +36,7 @@ const schemaConfig = {
 };
 
 const modelSchema = new ModelSchema(schemaConfig, { collection: modelName });
+modelSchema.index({ slug: 1, deleted: 1 }, { unique: true });
 
 /** @type {ModelSchema} */
 module.exports = DatabaseModel.model(modelName, modelSchema);

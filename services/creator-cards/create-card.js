@@ -48,7 +48,7 @@ async function generateUniqueSlug(title) {
 
   while (!isUnique) {
     // eslint-disable-next-line no-await-in-loop
-    const existing = await CreatorCard.findOne({ slug: finalSlug }).lean();
+    const existing = await CreatorCard.findOne({ slug: finalSlug, deleted: null }).lean();
     if (!existing) {
       isUnique = true;
     } else {
@@ -99,7 +99,7 @@ async function createCreatorCardService(serviceData) {
         );
       }
 
-      const existing = await CreatorCard.findOne({ slug: finalSlug }).lean();
+      const existing = await CreatorCard.findOne({ slug: finalSlug, deleted: null }).lean();
       if (existing) {
         throwAppError(CreatorCardMessages.SLUG_TAKEN, ERROR_CODE.SL02);
       }
