@@ -9,12 +9,16 @@
     "url": "profold-be-api-1"
   },
   "scripts": {
+    "start": "node app.js",
     "test": "set USE_MOCK_MODEL=1 && mocha --recursive --require dotenv/config",
     "prepare": "husky",
     "commitlint": "commitlint --edit",
     "sync-envs": "node sync-env-files"
   },
   "keywords": [],
+  "overrides": {
+    "uuid": "^11.1.1"
+  },
   "author": "Resilience17",
   "license": "ISC",
   "dependencies": {
@@ -60,7 +64,7 @@
     "resend": "^3.2.0",
     "ua-parser-js": "^2.0.0",
     "ulid": "^2.3.0",
-    "uuid": "^9.0.1"
+    "uuid": "^11.1.1"
   },
   "devDependencies": {
     "@app-core/mock-http-request-proxy": "file:core/mock-http-request-proxy",
