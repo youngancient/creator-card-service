@@ -14,6 +14,7 @@
     "ecmaVersion": 2022
   },
   "plugins": ["prettier", "mocha"],
+  "ignorePatterns": ["core/"],
   "rules": {
     "prettier/prettier": "error",
     "no-unused-vars": "warn",
