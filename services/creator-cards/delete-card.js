@@ -16,7 +16,9 @@ function formatResponse(cardData) {
   data.id = data._id;
   delete data._id;
   delete data.__v;
-  delete data.access_code;
+  if (!('access_code' in data) || data.access_code === undefined) {
+    data.access_code = null;
+  }
   return data;
 }
 

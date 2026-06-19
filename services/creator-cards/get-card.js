@@ -33,12 +33,12 @@ async function getCreatorCardService(serviceData, options = {}) {
     }
 
     if (card.status !== 'published') {
-      throwAppError(CreatorCardMessages.CARD_UNAVAILABLE, ERROR_CODE.NF02);
+      throwAppError(CreatorCardMessages.CARD_NOT_FOUND, ERROR_CODE.NF02);
     }
 
     if (card.access_type === 'private') {
       if (!data.access_code) {
-        throwAppError(CreatorCardMessages.ACCESS_CODE_REQUIRED_PRIVATE, ERROR_CODE.AC03);
+        throwAppError(CreatorCardMessages.CARD_PRIVATE, ERROR_CODE.AC03);
       }
       if (card.access_code !== data.access_code) {
         throwAppError(CreatorCardMessages.INVALID_ACCESS_CODE, ERROR_CODE.AC04);

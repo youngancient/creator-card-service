@@ -27,6 +27,7 @@ const ENDPOINT_CONFIGS = [
   },
   {
     path: './endpoints/creator-cards/',
+    options: { pathPrefix: '/creator-cards' },
   },
 ];
 

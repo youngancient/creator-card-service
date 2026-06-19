@@ -1,39 +1,42 @@
-# Review Status
+# Report
 
-## 🟡 Remaining
+## 🟡 Missing test: Framework validation failure (Test Case 10)
 
-### `service_rates.rates` missing `minLength:1` (create-card.js:19)
+`requirement.md:477-488` — no test sends an invalid enum value like `"archived"` for `status` to verify the VSL catches it and returns HTTP 400 with the framework's error format.
 
+```json
+POST /creator-cards
+{
+  "title": "Bad Status Card",
+  "creator_reference": "crt_q1w2e3r4t5y6u7i8",
+  "status": "archived"
+}
+Expected: HTTP 400 with the validator's error response
 ```
-rates[] {
+
+## 🔴 Missing `code` field in all error responses
+
+`core/express/server.js:244-252` — the error handler builds the response but never includes `error.errorCode` in the body.
+
+When `throwAppError('Slug is already taken', ERROR_CODE.SL02)` is thrown:
+
+**Actual response:**
+```json
+{ "status": "error", "message": "Slug is already taken" }
 ```
 
-Should be:
-
+**Required by spec:**
+```json
+{ "status": "error", "message": "Slug is already taken", "code": "SL02" }
 ```
-rates[]<minLength:1> {
-```
 
-Passing `"rates": []` passes VSL validation and only fails at Mongoose save time.
+Every business rule error (`SL02`, `AC01`, `AC05`, `NF01`, `NF02`, `AC03`, `AC04`) will return HTTP status correctly but will be **missing the `code` field**. The checklist says *"All custom business rule errors return the correct code"* — this fails that check.
 
----
-
-### Import convention (create-card.js:6)
-
+**Fix** — `server.js:249`, add:
 ```js
-const Messages = require('@app/messages/creator-card');
+responseComponents.body.code = error.errorCode || undefined;
 ```
 
-Template convention is through the package entry:
+## 💡 Suggestion: Link click tracking
 
-```js
-const { CreatorCardMessages } = require('@app/messages');
-```
-
-Works either way, just a style difference.
-
----
-
-### `randomBytes(6)` generates hex, not full alphanumeric (create-card.js:33)
-
-Requirement says: *"random 6-character alphanumeric suffix (e.g., `cook-a8x2k1`)"* — `a8x2k1` uses a-f + 0-9 + letters beyond f. `randomBytes(6)` only produces `[0-9a-f]`. The test expects `/^[a-f0-9]{6}$/` which matches hex, so test and implementation are consistent — just slightly narrower than the example.
+Add a `link_clicks` counter on each link entry that increments when `GET /creator-cards/:slug/click/:linkIndex` is called. This gives creators analytics on which links perform — addressing the actual product use case of a link-in-bio card beyond basic CRUD.

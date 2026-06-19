@@ -76,6 +76,7 @@ describe('Creator Card API Tests', () => {
       expect(response.status).to.equal(200);
       expect(response.data.slug).to.equal('george-cooks');
       expect(response.data.access_type).to.equal('public');
+      expect(response.data.access_code).to.equal(null);
       expect(response.data).to.have.property('id');
       expect(response.data).to.not.have.property('_id');
     });
@@ -193,6 +194,25 @@ describe('Creator Card API Tests', () => {
         expect.fail('Should have thrown an error');
       } catch (err) {
         expect(err.errorCode).to.equal('AC05');
+      }
+    });
+
+    it('should fail with validation error if status enum is invalid', async () => {
+      const req = httpMocks.createRequest({
+        method: 'POST',
+        body: {
+          title: 'Bad Status Card',
+          creator_reference: 'crt_q1w2e3r4t5y6u7i8',
+          status: 'archived',
+        },
+      });
+
+      try {
+        await createEndpoint.handler(req, { http_statuses: { HTTP_200_OK: 200 } });
+        expect.fail('Should have thrown an error');
+      } catch (err) {
+        expect(err.errorCode).to.equal('SPCL_VALIDATION');
+        expect(err.details.status).to.include('to be one of draft, published');
       }
     });
   });
@@ -359,6 +379,7 @@ describe('Creator Card API Tests', () => {
 
       expect(response.status).to.equal(200);
       expect(response.data.deleted).to.not.equal(null);
+      expect(response.data.access_code).to.equal(null);
       expect(response.data).to.have.property('id');
       expect(response.data).to.not.have.property('_id');
 

@@ -2,7 +2,7 @@ const { createHandler } = require('@app-core/server');
 const createCreatorCardService = require('@app/services/creator-cards/create-card');
 
 module.exports = createHandler({
-  path: '/',
+  path: '',
   method: 'post',
   middlewares: [],
   async handler(rc, helpers) {

@@ -1,6 +1,7 @@
 const validator = require('@app-core/validator');
 const { throwAppError, ERROR_CODE } = require('@app-core/errors');
 const { appLogger } = require('@app-core/logger');
+const { ulid } = require('@app-core/randomness');
 const CreatorCard = require('@app/models/creator-card');
 const { CreatorCardMessages } = require('@app/messages');
 
@@ -63,6 +64,9 @@ function formatResponse(cardData) {
   data.id = data._id;
   delete data._id;
   delete data.__v;
+  if (!('access_code' in data) || data.access_code === undefined) {
+    data.access_code = null;
+  }
   return data;
 }
 
@@ -106,6 +110,7 @@ async function createCreatorCardService(serviceData) {
 
     const now = Date.now();
     const newCardData = {
+      _id: ulid(),
       title: data.title,
       description: data.description,
       slug: finalSlug,
