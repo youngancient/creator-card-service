@@ -61,7 +61,7 @@ function evaluatePossibleValues(value, possibleValues, prop, errors) {
     const pvSet = new Set(possibleValues);
     isValid = pvSet.has(value);
     if (!isValid) {
-      errorMessage = `Expected ${prop}'s value: ${value} to be one of ${possibleValues.join(', ')}`;
+      errorMessage = `${value} is not a valid ${prop}`;
     }
   }
   if (errorMessage) {

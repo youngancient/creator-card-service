@@ -211,8 +211,8 @@ describe('Creator Card API Tests', () => {
         await createEndpoint.handler(req, { http_statuses: { HTTP_200_OK: 200 } });
         expect.fail('Should have thrown an error');
       } catch (err) {
-        expect(err.errorCode).to.equal('SPCL_VALIDATION');
-        expect(err.details.status).to.include('to be one of draft, published');
+        expect(err.errorCode).to.equal('VALIDATION_ERROR');
+        expect(err.details.status).to.include('archived is not a valid status');
       }
     });
   });

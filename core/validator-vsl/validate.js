@@ -18,7 +18,8 @@ function validateParsedSpec(data, parsedSpec, options = {}) {
     // console.log(result);
   } catch (e) {
     // console.log(errors);
-    throwAppError(e.message, 'SPCL_VALIDATION', { details: errors });
+    const { __$app_no_throw, __$app_first_message, ...cleanErrors } = errors;
+    throwAppError(e.message, 'VALIDATION_ERROR', { details: cleanErrors });
   }
 
   // eslint-disable-next-line camelcase
@@ -34,7 +35,7 @@ function validateParsedSpec(data, parsedSpec, options = {}) {
     });
     // eslint-disable-next-line camelcase
     const errorMessageToThrow = process?.env?.TOP_LEVEL_ERROR_MESSAGE || __$app_first_message;
-    throwAppError(errorMessageToThrow, 'SPCL_VALIDATION', { details: errorsArray });
+    throwAppError(errorMessageToThrow, 'VALIDATION_ERROR', { details: errorsArray });
   }
   return result;
 }
